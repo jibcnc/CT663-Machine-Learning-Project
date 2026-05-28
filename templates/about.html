@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}เกี่ยวกับโปรเจกต์ | Sleep Disorder Screening{% endblock %}
+{% block content %}
+<section class="page-hero small about-hero">
+  <div class="container">
+    <div class="eyebrow">About This Project</div>
+    <h1>เกี่ยวกับโปรเจกต์และข้อจำกัด</h1>
+    <p>
+      ระบบประเมินความเสี่ยงภาวะผิดปกติการนอนด้วย Machine Learning
+      โดยใช้ปัจจัยด้านสุขภาพ พฤติกรรมการนอน และไลฟ์สไตล์เป็นข้อมูลนำเข้า
+    </p>
+  </div>
+</section>
+
+<section class="container about-page">
+
+  <div class="about-intro-card">
+    <div>
+      <span class="about-kicker">Project Overview</span>
+      <h2>Sleep Disorder Risk Screening</h2>
+      <p>
+        โปรเจกต์นี้พัฒนาเว็บแอปสำหรับคัดกรองความเสี่ยงภาวะผิดปกติการนอน
+        โดยใช้โมเดล Machine Learning เพื่อจำแนกผลลัพธ์ออกเป็น 3 กลุ่ม ได้แก่
+        <strong>None</strong>, <strong>Insomnia</strong> และ <strong>Sleep Apnea</strong>
+      </p>
+    </div>
+
+    <div class="about-summary-badge">
+      <span>Dataset</span>
+      <strong>374 Records</strong>
+      <small>Sleep Health and Lifestyle Dataset</small>
+    </div>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-panel">
+      <div class="about-panel-icon">01</div>
+      <h3>เป้าหมายของโปรเจกต์</h3>
+      <p>
+        สร้างระบบคัดกรองเบื้องต้นที่ช่วยประเมินแนวโน้มความเสี่ยงจากข้อมูลสุขภาพและพฤติกรรม
+        เพื่อแสดงผลบน Web App ที่ใช้งานง่ายและเหมาะกับการนำเสนอโปรเจกต์
+      </p>
+    </div>
+
+    <div class="about-panel">
+      <div class="about-panel-icon">02</div>
+      <h3>ข้อมูลที่ใช้ในการประเมิน</h3>
+      <ul class="about-list">
+        <li>ข้อมูลพื้นฐาน เช่น เพศ อายุ และอาชีพ</li>
+        <li>ข้อมูลการนอน เช่น ระยะเวลาการนอนและคุณภาพการนอน</li>
+        <li>ข้อมูลไลฟ์สไตล์ เช่น ความเครียด กิจกรรมทางกาย และจำนวนก้าว</li>
+        <li>ข้อมูลสุขภาพ เช่น BMI ความดันโลหิต และอัตราการเต้นหัวใจ</li>
+      </ul>
+    </div>
+
+    <div class="about-panel">
+      <div class="about-panel-icon">03</div>
+      <h3>เทคโนโลยีที่ใช้</h3>
+      <ul class="about-list">
+        <li><strong>Python / Flask</strong> สำหรับ Web Backend</li>
+        <li><strong>scikit-learn</strong> สำหรับ Machine Learning Model</li>
+        <li><strong>HTML, CSS, JavaScript</strong> สำหรับหน้า Web App</li>
+        <li><strong>Joblib</strong> สำหรับโหลดโมเดลและไฟล์ประกอบจาก Notebook</li>
+      </ul>
+    </div>
+
+    <div class="about-panel warning">
+      <div class="about-panel-icon">04</div>
+      <h3>ข้อจำกัดของระบบ</h3>
+      <ul class="about-list">
+        <li>ชุดข้อมูลมีขนาดจำกัด จึงเหมาะกับการศึกษาและการสาธิต</li>
+        <li>ผลลัพธ์เป็นการคัดกรองเบื้องต้น ไม่ใช่การวินิจฉัยทางการแพทย์</li>
+        <li>อาชีพที่ไม่มีใน dataset จะถูก map ไปยังกลุ่มงานที่ใกล้เคียงที่สุด</li>
+        <li>ควรตีความผลร่วมกับบริบทจริงและคำแนะนำจากผู้เชี่ยวชาญ</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="about-notice">
+    <strong>หมายเหตุสำคัญ:</strong>
+    Web App นี้จัดทำเพื่อการเรียนรู้และการนำเสนอโปรเจกต์ Machine Learning เท่านั้น
+    หากมีปัญหาการนอนอย่างต่อเนื่อง ควรปรึกษาแพทย์หรือผู้เชี่ยวชาญด้านการนอน
+  </div>
+
+</section>
+{% endblock %}

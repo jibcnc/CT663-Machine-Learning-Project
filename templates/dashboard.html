@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}ผลโมเดล | Sleep Disorder Screening{% endblock %}
+{% block content %}
+<section class="page-hero small dashboard-hero">
+  <div class="container">
+    <div class="eyebrow">Model Performance Dashboard</div>
+    <h1>ผลการพัฒนาโมเดล</h1>
+    <p>
+      สรุปผลจาก Final Notebook และไฟล์ <strong>model_info.pkl</strong>
+      เพื่อแสดงโมเดลที่ดีที่สุด คะแนน Cross-Validation และผลประเมินบนชุดทดสอบ
+    </p>
+  </div>
+</section>
+
+<section class="container dashboard-page">
+  <div class="dashboard-intro-card">
+    <div>
+      <span class="dashboard-kicker">Final Selected Model</span>
+      <h2>{{ model_info.best_model }}</h2>
+      <p>
+        โมเดลนี้ถูกเลือกจากการเปรียบเทียบหลายโมเดล โดยใช้ค่า Macro F1 เป็นตัวชี้วัดหลัก
+        เพื่อให้เหมาะกับโจทย์จำแนกภาวะผิดปกติการนอนแบบ 3 กลุ่ม
+      </p>
+    </div>
+    <div class="dashboard-model-badge">
+      <span>Target</span>
+      <strong>Sleep Disorder</strong>
+      <small>None · Insomnia · Sleep Apnea</small>
+    </div>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <span>Model Name</span>
+      <strong>{{ model_info.model_name }}</strong>
+      <small>โมเดลที่ export จาก Notebook</small>
+    </div>
+    <div class="metric-card">
+      <span>Best Model</span>
+      <strong>{{ model_info.best_model }}</strong>
+      <small>เลือกจาก Cross-Validation</small>
+    </div>
+    <div class="metric-card highlight">
+      <span>CV Macro F1</span>
+      <strong>{{ model_info.cv_macro_f1 }}</strong>
+      <small>ตัวชี้วัดหลักในการเลือกโมเดล</small>
+    </div>
+    <div class="metric-card highlight-blue">
+      <span>Final Accuracy</span>
+      <strong>{{ model_info.final_accuracy }}</strong>
+      <small>ผลประเมินบน test set</small>
+    </div>
+  </div>
+
+  <div class="dashboard-section-title">
+    <h2>Evaluation Summary</h2>
+    <p>สรุปผลการประเมินโมเดลจาก Cross-Validation และ Final Test Evaluation</p>
+  </div>
+
+  <div class="dashboard-grid two">
+    <div class="dashboard-panel">
+      <div class="panel-head">
+        <div>
+          <span class="panel-label">Training Evaluation</span>
+          <h3>Cross-Validation Summary</h3>
+        </div>
+      </div>
+
+      <div class="score-list">
+        <div class="score-row"><span>Best Model</span><strong>{{ model_info.best_model }}</strong></div>
+        <div class="score-row"><span>CV Accuracy</span><strong>{{ model_info.cv_accuracy }}</strong></div>
+        <div class="score-row"><span>CV Macro F1</span><strong>{{ model_info.cv_macro_f1 }}</strong></div>
+        <div class="score-row"><span>Selection Metric</span><strong>Macro F1</strong></div>
+      </div>
+    </div>
+
+    <div class="dashboard-panel">
+      <div class="panel-head">
+        <div>
+          <span class="panel-label">Hold-out Test Set</span>
+          <h3>Final Test Evaluation</h3>
+        </div>
+      </div>
+
+      <div class="score-list">
+        <div class="score-row"><span>Accuracy</span><strong>{{ model_info.final_accuracy }}</strong></div>
+        <div class="score-row"><span>Precision</span><strong>{{ model_info.final_precision }}</strong></div>
+        <div class="score-row"><span>Recall</span><strong>{{ model_info.final_recall }}</strong></div>
+        <div class="score-row"><span>F1 Macro</span><strong>{{ model_info.final_macro_f1 }}</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid two">
+    <div class="dashboard-panel">
+      <div class="panel-head">
+        <div>
+          <span class="panel-label">Method</span>
+          <h3>Evaluation Method</h3>
+        </div>
+      </div>
+
+      <ul class="dashboard-list">
+        <li><strong>Train/Test Split</strong><span>แบ่งข้อมูลเพื่อเก็บ test set ไว้ประเมินผลสุดท้าย</span></li>
+        <li><strong>Stratified K-Fold Cross-Validation</strong><span>ใช้ประเมินโมเดลให้ผลนิ่งขึ้น และรักษาสัดส่วนของแต่ละ class</span></li>
+        <li><strong>Macro F1 Selection</strong><span>เลือกโมเดลจากค่า Macro F1 เพราะโจทย์เป็น multi-class classification</span></li>
+        <li><strong>Model Export</strong><span>นำโมเดลที่ดีที่สุด export ไปใช้งานกับ Flask Web App</span></li>
+      </ul>
+    </div>
+
+    <div class="dashboard-panel">
+      <div class="panel-head">
+        <div>
+          <span class="panel-label">Prediction Classes</span>
+          <h3>Output Classes</h3>
+        </div>
+      </div>
+
+      <div class="class-list">
+        <div class="class-card normal"><strong>None</strong><span>ไม่พบรูปแบบความเสี่ยงเด่นชัด</span></div>
+        <div class="class-card insomnia"><strong>Insomnia</strong><span>รูปแบบสอดคล้องกับภาวะนอนไม่หลับ</span></div>
+        <div class="class-card apnea"><strong>Sleep Apnea</strong><span>รูปแบบสอดคล้องกับภาวะหยุดหายใจขณะหลับ</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-note">
+    <strong>หมายเหตุ:</strong>
+    ค่าที่แสดงในหน้านี้ดึงจาก <code>model_info.pkl</code> ซึ่ง export จาก Notebook Final
+    หากมีการ train โมเดลใหม่ ให้ export ไฟล์นี้ใหม่และนำมาวางข้าง <code>app.py</code>
+  </div>
+</section>
+{% endblock %}

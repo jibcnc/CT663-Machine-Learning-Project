@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}หน้าหลัก | Sleep Disorder Screening{% endblock %}
+{% block content %}
+<section class="landing-hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">Machine Learning · Sleep Disorder Risk Screening</div>
+      <h1>
+        ประเมินความเสี่ยง<br>
+        <span>ภาวะผิดปกติการนอน</span>
+      </h1>
+      <p>
+        เว็บแอปนี้ใช้โมเดล Machine Learning เพื่อคัดกรองความเสี่ยงภาวะผิดปกติการนอน
+        จากปัจจัยด้านสุขภาพและไลฟ์สไตล์ เช่น ระยะเวลาการนอน คุณภาพการนอน ความเครียด
+        กิจกรรมทางกาย BMI ความดันโลหิต อัตราการเต้นหัวใจ และจำนวนก้าวต่อวัน
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="/assessment">เริ่มประเมินความเสี่ยง</a>
+        <a class="btn btn-outline btn-lg" href="/dashboard">ดูผลโมเดล</a>
+      </div>
+      <div class="hero-note">
+        ผลลัพธ์เป็นการประเมินเบื้องต้นเพื่อการศึกษาและคัดกรอง ไม่ใช่การวินิจฉัยทางการแพทย์
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="sleep-risk-board">
+        <div class="risk-board-header">
+          <div class="risk-board-badge">Sleep Disorder Risk</div>
+          <div class="risk-board-status">Screening Model</div>
+        </div>
+
+        <div class="risk-main-visual">
+          <div class="sleep-figure-card">
+            <div class="sleep-moon">☾</div>
+            <div class="sleep-bed">
+              <span class="bed-head"></span>
+              <span class="bed-body"></span>
+            </div>
+            <div class="sleep-caption">Sleep Health Monitoring</div>
+          </div>
+
+          <div class="risk-alert-group">
+            <div class="risk-alert insomnia">
+              <strong>Insomnia Risk</strong>
+              <span>นอนน้อย / คุณภาพการนอนต่ำ</span>
+            </div>
+            <div class="risk-alert apnea">
+              <strong>Sleep Apnea Risk</strong>
+              <span>BMI สูง / ความดันสูง / กรนดัง</span>
+            </div>
+            <div class="risk-alert stress">
+              <strong>Lifestyle Factors</strong>
+              <span>Stress Level / Heart Rate / Daily Steps</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="risk-factor-grid">
+          <div class="factor-chip">Sleep Duration</div>
+          <div class="factor-chip">Quality of Sleep</div>
+          <div class="factor-chip">Stress Level</div>
+          <div class="factor-chip">BMI Category</div>
+          <div class="factor-chip">Blood Pressure</div>
+          <div class="factor-chip">Heart Rate</div>
+        </div>
+
+        <div class="risk-meter-block">
+          <div class="risk-meter-label">
+            <span>Low Risk</span>
+            <span>Risk Level</span>
+            <span>High Risk</span>
+          </div>
+          <div class="risk-meter">
+            <div class="risk-meter-fill"></div>
+          </div>
+        </div>
+
+        <div class="risk-output-preview">
+          <div class="output-card normal">
+            <strong>None</strong>
+            <span>ไม่พบความเสี่ยงเด่นชัด</span>
+          </div>
+          <div class="output-card insomnia">
+            <strong>Insomnia</strong>
+            <span>แนวโน้มภาวะนอนไม่หลับ</span>
+          </div>
+          <div class="output-card apnea">
+            <strong>Sleep Apnea</strong>
+            <span>แนวโน้มหยุดหายใจขณะหลับ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container home-shortcuts">
+  <div class="quick-grid">
+    <a class="quick-card" href="/assessment">
+      <div class="quick-icon">01</div>
+      <h3>เริ่มประเมินความเสี่ยง</h3>
+      <p>กรอกข้อมูลสุขภาพและพฤติกรรมการนอนผ่านแบบฟอร์ม 5 ขั้นตอน</p>
+    </a>
+    <a class="quick-card" href="/dashboard">
+      <div class="quick-icon">02</div>
+      <h3>ผลการพัฒนาโมเดล</h3>
+      <p>ดูชื่อโมเดลที่เลือก คะแนน Cross-Validation และผลประเมินบนชุดทดสอบ</p>
+    </a>
+    <a class="quick-card" href="/about">
+      <div class="quick-icon">03</div>
+      <h3>รายละเอียดโปรเจกต์</h3>
+      <p>อธิบาย dataset, target classes, ขั้นตอน preprocessing และข้อจำกัดของระบบ</p>
+    </a>
+  </div>
+</section>
+{% endblock %}

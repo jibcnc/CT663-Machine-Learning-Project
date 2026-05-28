@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block title %}เริ่มประเมิน | Sleep Disorder Screening{% endblock %}
+{% block content %}
+<section class="page-hero small">
+  <div class="container">
+    <div class="eyebrow">Risk Assessment Form</div>
+    <h1>แบบประเมินความเสี่ยงภาวะผิดปกติการนอน</h1>
+    <p>
+      กรอกข้อมูลทีละขั้น ระบบจะสรุปข้อมูลก่อนส่งให้โมเดล Machine Learning ประเมินผลเป็น
+      None, Insomnia หรือ Sleep Apnea
+    </p>
+  </div>
+</section>
+
+<section class="container assessment-layout">
+  <aside class="step-sidebar">
+    <div class="side-title">ขั้นตอนการประเมิน</div>
+    <div class="step-item active" data-step-dot="1"><span>1</span>ข้อมูลพื้นฐาน</div>
+    <div class="step-item" data-step-dot="2"><span>2</span>ข้อมูลการนอน</div>
+    <div class="step-item" data-step-dot="3"><span>3</span>ไลฟ์สไตล์</div>
+    <div class="step-item" data-step-dot="4"><span>4</span>ข้อมูลสุขภาพ</div>
+    <div class="step-item" data-step-dot="5"><span>5</span>ตรวจสอบและประเมินผล</div>
+  </aside>
+
+  <div class="assessment-main">
+    <div class="progress-head">
+      <div>
+        <strong id="stepLabel">ขั้นตอน 1/5</strong>
+        <span id="stepTitle">ข้อมูลพื้นฐาน</span>
+      </div>
+      <strong id="progressText">20%</strong>
+    </div>
+    <div class="progress-bar"><div id="progressFill"></div></div>
+
+    <form id="assessForm" class="glass-form" novalidate>
+      <div class="error-box" id="errorBox"></div>
+
+      <section class="form-step active" data-step="1">
+        <div class="form-card">
+          <h2>1. ข้อมูลพื้นฐาน</h2>
+          <p>ข้อมูลทั่วไปและอาชีพของผู้ใช้ เพื่อใช้ประกอบการประเมินความเสี่ยงเบื้องต้น</p>
+          <div class="form-grid">
+            <div class="field">
+              <label>เพศ</label>
+              <div class="radio-row">
+                <input type="radio" id="gM" name="gender" value="Male" checked><label for="gM">ชาย</label>
+                <input type="radio" id="gF" name="gender" value="Female"><label for="gF">หญิง</label>
+              </div>
+            </div>
+            <div class="field">
+              <label for="age">อายุ</label>
+              <input type="number" id="age" min="1" max="120" value="35" aria-label="อายุ">
+              <div class="inline-error" id="ageError"></div>
+            </div>
+            <div class="field span-2">
+              <label for="occupation">อาชีพ</label>
+              <select id="occupation">
+                {% for occ in occupations %}
+                <option value="{{ occ.value }}">{{ occ.label }}</option>
+                {% endfor %}
+                <option value="__other__">อาชีพอื่น / Other</option>
+              </select>
+            </div>
+            <div class="field span-2 hidden" id="otherOccField">
+              <label for="occOther">เลือกกลุ่มงานที่ใกล้เคียงที่สุด</label>
+              <select id="occOther">
+                {% for value, label in occupation_groups %}
+                <option value="{{ value }}">{{ label }} (ใช้แทน {{ value }})</option>
+                {% endfor %}
+              </select>
+              <small>หากอาชีพไม่อยู่ในชุดข้อมูลฝึก ระบบจะใช้กลุ่มงานใกล้เคียงแทน ผลลัพธ์อาจมีความไม่แน่นอนเพิ่มขึ้น</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-step" data-step="2">
+        <div class="form-card">
+          <h2>2. ข้อมูลการนอน</h2>
+          <p>ระบุระยะเวลาการนอนและคุณภาพการนอนโดยรวม ซึ่งเป็นปัจจัยสำคัญของโปรเจกต์นี้</p>
+          <div class="form-grid">
+            <div class="field">
+              <label for="sleepDur">ชั่วโมงการนอนต่อคืน</label>
+              <input type="number" id="sleepDur" min="0" max="24" step="0.1" value="7.0">
+              <div class="inline-error" id="sleepDurError"></div>
+            </div>
+            <div class="field">
+              <label for="sleepQual">คะแนนคุณภาพการนอน 1–10</label>
+              <input type="number" id="sleepQual" min="1" max="10" step="1" value="7">
+              <div class="field-help">
+                <strong>วิธีให้คะแนน:</strong>
+                ประเมินจากคุณภาพการนอนโดยรวมในช่วง 7 วันที่ผ่านมา เช่น หลับยากไหม ตื่นกลางดึกบ่อยไหม
+                และตื่นมาแล้วสดชื่นหรือไม่<br>
+                <span>1–2 = แย่มาก, 3–4 = ค่อนข้างแย่, 5–6 = ปานกลาง, 7–8 = ดี, 9–10 = ดีมาก</span>
+              </div>
+              <div class="inline-error" id="sleepQualError"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-step" data-step="3">
+        <div class="form-card">
+          <h2>3. ไลฟ์สไตล์และกิจกรรม</h2>
+          <p>ข้อมูลด้านกิจกรรม ความเครียด จำนวนก้าว และอัตราการเต้นหัวใจที่เกี่ยวข้องกับสุขภาพการนอน</p>
+          <div class="form-grid">
+            <div class="field">
+              <label for="activity">กิจกรรมทางกาย (นาที/วัน)</label>
+              <input type="number" id="activity" min="0" max="500" step="1" value="60">
+              <div class="inline-error" id="activityError"></div>
+            </div>
+            <div class="field">
+              <label for="stress">ระดับความเครียด 1–10</label>
+              <input type="number" id="stress" min="1" max="10" step="1" value="5">
+              <div class="field-help">
+                <strong>วิธีให้คะแนน:</strong>
+                ประเมินจากระดับความเครียดโดยรวมในช่วง 7 วันที่ผ่านมา เช่น ความกังวล ความกดดัน
+                ความคิดมากก่อนนอน หรือความรู้สึกเหนื่อยล้าทางใจ<br>
+                <span>1–2 = เครียดน้อยมาก, 3–4 = เครียดเล็กน้อย, 5–6 = ปานกลาง, 7–8 = ค่อนข้างสูง, 9–10 = สูงมาก</span>
+              </div>
+              <div class="inline-error" id="stressError"></div>
+            </div>
+            <div class="field">
+              <label for="steps">จำนวนก้าวต่อวัน</label>
+              <input type="number" id="steps" min="0" max="100000" step="100" value="7000">
+              <div class="inline-error" id="stepsError"></div>
+            </div>
+            <div class="field">
+              <label for="hr">อัตราการเต้นหัวใจขณะพัก (bpm)</label>
+              <input type="number" id="hr" min="20" max="250" step="1" value="72">
+              <div class="inline-error" id="hrError"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-step" data-step="4">
+        <div class="form-card">
+          <h2>4. ข้อมูลสุขภาพ</h2>
+          <p>กรอก BMI Category และความดันโลหิต หรือกรอกน้ำหนัก/ส่วนสูงเพื่อช่วยคำนวณ BMI เบื้องต้น</p>
+
+          <div class="bmi-panel">
+            <div class="form-grid">
+              <div class="field">
+                <label for="weight">น้ำหนัก (kg)</label>
+                <input type="number" id="weight" min="20" max="300" step="0.1" placeholder="เช่น 65">
+              </div>
+              <div class="field">
+                <label for="height">ส่วนสูง (cm)</label>
+                <input type="number" id="height" min="100" max="230" step="0.1" placeholder="เช่น 170">
+              </div>
+            </div>
+            <div class="bmi-result" id="bmiDisplay">
+              <strong>BMI: <span id="bmiValue">—</span></strong>
+              <span id="bmiCatLabel">กรอกน้ำหนัก + ส่วนสูง หรือเลือก BMI Category ด้านล่าง</span>
+              <small id="bmiCatDesc"></small>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="bmi">BMI Category</label>
+              <select id="bmi">
+                {% for bmi in bmi_options %}
+                <option value="{{ bmi }}">{{ bmi }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field">
+              <label for="bpSys">ความดันตัวบน (Systolic)</label>
+              <input type="number" id="bpSys" min="50" max="300" step="1" value="120">
+              <div class="inline-error" id="bpSysError"></div>
+            </div>
+            <div class="field">
+              <label for="bpDia">ความดันตัวล่าง (Diastolic)</label>
+              <input type="number" id="bpDia" min="20" max="200" step="1" value="80">
+              <div class="inline-error" id="bpDiaError"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-step" data-step="5">
+        <div class="form-card">
+          <h2>5. ตรวจสอบข้อมูลและประเมินผล</h2>
+          <p>ตรวจสอบข้อมูลก่อนส่งให้โมเดลประเมินความเสี่ยงภาวะผิดปกติการนอน</p>
+          <div id="reviewBox" class="review-box"></div>
+        </div>
+      </section>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" id="sampleBtn">เติมข้อมูลตัวอย่าง</button>
+        <button type="button" class="btn btn-outline" id="prevBtn">ย้อนกลับ</button>
+        <button type="button" class="btn btn-primary" id="nextBtn">ถัดไป</button>
+        <button type="submit" class="btn btn-primary hidden" id="submitBtn">ประเมินผลด้วยโมเดล</button>
+      </div>
+    </form>
+
+    <section id="results" class="results-panel">
+      <div class="result-card main" id="verdictCard" data-status="None">
+        <div class="result-label">ผลการประเมินเบื้องต้น</div>
+        <h2 id="verdictTitle">—</h2>
+        <p id="verdictDesc">—</p>
+        <div class="summary-grid">
+          <div><span>ระดับความเสี่ยง</span><strong id="riskLevel">—</strong></div>
+          <div><span>ความมั่นใจของโมเดล</span><strong id="confNum">—</strong></div>
+          <div><span>คำแนะนำสรุป</span><strong id="clinicalNote">—</strong></div>
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-card">
+          <h3>คะแนนความเป็นไปได้ของแต่ละกลุ่ม</h3>
+          <p class="muted">คะแนนนี้ใช้ช่วยตีความผลลัพธ์จากโมเดล ไม่ใช่ค่าความน่าจะเป็นทางการแพทย์โดยตรง</p>
+          <p class="muted" id="resolvedOccNote"></p>
+          <div id="probBars"></div>
+        </div>
+
+        <div class="result-card">
+          <h3>คำแนะนำเบื้องต้น</h3>
+          <div class="rec-group"><h4>ควรทำก่อน</h4><ul id="priorityList"></ul></div>
+          <div class="rec-group"><h4>ควรติดตาม</h4><ul id="monitorList"></ul></div>
+          <div class="rec-group"><h4>ควรพบแพทย์เมื่อมีอาการร่วม</h4><ul id="medicalList"></ul></div>
+        </div>
+      </div>
+
+      <div class="notice">
+        ผลลัพธ์นี้เป็นการประเมินเบื้องต้นจากแบบจำลอง Machine Learning เพื่อใช้ในการคัดกรองและการศึกษาเท่านั้น
+        ไม่สามารถใช้แทนการวินิจฉัย การตรวจร่างกาย หรือคำแนะนำจากแพทย์ได้
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/assessment.js') }}"></script>
+{% endblock %}
